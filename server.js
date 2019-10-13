@@ -93,8 +93,8 @@ class Server
 	}
 
 	/**
-	 * @params {Object} options
-	 * @params {function} listener
+	 * @param {Object} options
+	 * @param {function} listener
 	 * @returns {http.Server}
 	 */
 	_createServerResource(options, listener){
