@@ -29,7 +29,6 @@ class Server
 	constructor(config){
 		this.config = Object.assign({}, config);
 		this.resource = this._createServerResource();
-		this.isLocked = false;
 		this.isStarted = false;
 	}
 	
@@ -39,9 +38,6 @@ class Server
 	 * @returns {Server}
 	 */
 	listen(listener){
-		if (this.isLocked) {
-			throw new Error('The server is locked');
-		}
 		if (this.isStarted) {
 			throw new Error('The server is started');
 		}
@@ -55,9 +51,6 @@ class Server
 	 * @returns {Server}
 	 */
 	unlisten(listener){
-		if (this.isLocked) {
-			throw new Error('The server is locked');
-		}
 		if (this.isStarted) {
 			throw new Error('The server is started');
 		}
@@ -69,19 +62,14 @@ class Server
 	 * @returns {Promise}
 	 */
 	start(){
-		if (this.isLocked) {
-			return Promise.reject(new Error('The server is locked'));
-		}
 		if (this.isStarted) {
 			return Promise.reject(new Error('The server is started'));
 		}
-		this.isLocked = true;
 		return new Promise((resolve, reject) => {
 			this.resource.once('error', reject);
 			this.resource.listen(this.config.port, this.config.host, () => {
 				this.resource.removeListener('error', reject);
 				this.isStarted = true;
-				this.isLocked = false;
 				resolve();
 			});
 		});
@@ -91,17 +79,12 @@ class Server
 	 * @returns {Promise}
 	 */
 	stop(){
-		if (this.isLocked) {
-			return Promise.reject(new Error('The server is locked'));
-		}
 		if (!this.isStarted) {
 			return Promise.reject(new Error('The server is not started'));
 		}
-		this.isLocked = true;
 		return new Promise((resolve) => {
 			this.resource.close(() => {
 				this.isStarted = false;
-				this.isLocked = false;
 				resolve();
 			});
 		});
