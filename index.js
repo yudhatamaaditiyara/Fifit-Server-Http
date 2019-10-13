@@ -15,11 +15,7 @@
  */
 'use strict';
 
-const Server = require('./server');
-const Request = require('./request');
-const Response = require('./response');
-
 /**
  * @+
  */
-module.exports = {Server, Request, Response};
+module.exports = require('./server');
