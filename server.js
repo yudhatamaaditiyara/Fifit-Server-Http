@@ -28,8 +28,9 @@ class Server
 	 */
 	constructor(config){
 		this.config = Object.assign({}, config);
-		this.created = false;
-		this.started = false;
+		this.resource = this._createServerResource();
+		this.isLocked = false;
+		this.isStarted = false;
 	}
 	
 	/**
@@ -37,31 +38,50 @@ class Server
 	 * @throws {Error}
 	 * @returns {Server}
 	 */
-	create(listener){
-		if (this.created) {
-			throw new Error('The server is already created');
+	listen(listener){
+		if (this.isLocked) {
+			throw new Error('The server is locked');
 		}
-		this.created = true;
-		this.options = this._createServerOptions();
-		this.resource = this._createServerResource(this.options, listener);
+		if (this.isStarted) {
+			throw new Error('The server is started');
+		}
+		this.resource.on('request', listener);
 		return this;
 	}
 
 	/**
+	 * @param {function} listener
+	 * @throws {Error}
+	 * @returns {Server}
+	 */
+	unlisten(listener){
+		if (this.isLocked) {
+			throw new Error('The server is locked');
+		}
+		if (this.isStarted) {
+			throw new Error('The server is started');
+		}
+		this.resource.removeListener('request', listener);
+		return this;
+	}
+	
+	/**
 	 * @returns {Promise}
 	 */
 	start(){
-		if (this.started) {
-			return Promise.reject(new Error('The server is already started'));
+		if (this.isLocked) {
+			return Promise.reject(new Error('The server is locked'));
 		}
-		if (!this.created) {
-			return Promise.reject(new Error('The server is not created'));
+		if (this.isStarted) {
+			return Promise.reject(new Error('The server is started'));
 		}
-		this.started = true;
+		this.isLocked = true;
 		return new Promise((resolve, reject) => {
 			this.resource.once('error', reject);
 			this.resource.listen(this.config.port, this.config.host, () => {
 				this.resource.removeListener('error', reject);
+				this.isStarted = true;
+				this.isLocked = false;
 				resolve();
 			});
 		});
@@ -71,12 +91,17 @@ class Server
 	 * @returns {Promise}
 	 */
 	stop(){
-		if (!this.started) {
+		if (this.isLocked) {
+			return Promise.reject(new Error('The server is locked'));
+		}
+		if (!this.isStarted) {
 			return Promise.reject(new Error('The server is not started'));
 		}
-		this.started = false;
+		this.isLocked = true;
 		return new Promise((resolve) => {
 			this.resource.close(() => {
+				this.isStarted = false;
+				this.isLocked = false;
 				resolve();
 			});
 		});
@@ -93,12 +118,10 @@ class Server
 	}
 
 	/**
-	 * @param {Object} options
-	 * @param {function} listener
 	 * @returns {http.Server}
 	 */
-	_createServerResource(options, listener){
-		return http.createServer(options, listener);
+	_createServerResource(){
+		return http.createServer(this._createServerOptions());
 	}
 }
 
