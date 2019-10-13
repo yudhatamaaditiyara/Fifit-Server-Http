@@ -24,12 +24,16 @@ const Response = require('./response');
 class Server
 {
 	/**
+	 * @var {boolean}
+	 */
+	isStarted = false;
+
+	/**
 	 * @param {Object} config
 	 */
 	constructor(config){
 		this.config = Object.assign({}, config);
 		this.resource = this._createServerResource();
-		this.isStarted = false;
 	}
 	
 	/**
