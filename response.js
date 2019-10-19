@@ -42,7 +42,7 @@ class Response extends ServerResponse
 	 */
 	static class(server){
 		class Response extends this{};
-		Response.protoype.server = server;
+		Response.prototype.server = server;
 		return Response;
 	}
 }
