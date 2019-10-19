@@ -176,7 +176,9 @@ class Request extends IncomingMessage
 	 * @returns {function}
 	 */
 	static class(server){
-		return class extends this {server = server};
+		class Request extends this{};
+		Request.protoype.server = server;
+		return Request;
 	}
 }
 

@@ -41,7 +41,9 @@ class Response extends ServerResponse
 	 * @returns {function}
 	 */
 	static class(server){
-		return class extends this {server = server};
+		class Response extends this{};
+		Response.protoype.server = server;
+		return Response;
 	}
 }
 
