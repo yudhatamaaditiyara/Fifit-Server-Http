@@ -171,7 +171,7 @@ class Request extends IncomingMessage
 	 * @returns {Url}
 	 */
 	get parsedHref(){
-		if (this._parsedHref == null) {
+		if (this._parsedHref != null) {
 			return this._parsedHref;
 		}
 		try {
