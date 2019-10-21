@@ -19,6 +19,12 @@ const {IncomingMessage} = require('http');
 const Url = require('fifit-url');
 
 /**
+ * @var
+ */
+const schemeRegexp = /^[a-zA-Z][a-zA-Z0-9+-.]*:/;
+const portRegexp = /\:([0-9]*)$/;
+
+/**
  */
 class Request extends IncomingMessage
 {
@@ -33,7 +39,7 @@ class Request extends IncomingMessage
 	 * @returns {boolean}
 	 */
 	get isAbsoluteUrl(){
-		return /^[a-zA-Z][a-zA-Z0-9+-.]*:/.test(this.url);
+		return schemeRegexp.test(this.url);
 	}
 
 	/**
@@ -103,8 +109,7 @@ class Request extends IncomingMessage
 	 */
 	get port(){
 		if (this._port == null) {
-			const host = this.host;
-			this._port = (/\:([0-9]*)$/.exec(host) || [])[1] || '';
+			this._port = (portRegexp.exec(this.host) || [])[1] || '';
 		}
 		return this._port;
 	}
