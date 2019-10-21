@@ -155,8 +155,14 @@ class Request extends IncomingMessage
 	 * @returns {Url}
 	 */
 	get parsedUrl(){
-		if (this._parsedUrl == null) {
-			this._parsedUrl = new Url(this.url);
+		if (this._parsedUrl != null) {
+			return this._parsedUrl;
+		}
+		try {
+			this._parsedUrl = new Url();
+			this._parsedUrl.parse(this.url);
+		} catch (e) {
+			this._parsedUrl = new Url();
 		}
 		return this._parsedUrl;
 	}
@@ -166,11 +172,17 @@ class Request extends IncomingMessage
 	 */
 	get parsedHref(){
 		if (this._parsedHref == null) {
-			this._parsedHref = new Url(this.href);
+			return this._parsedHref;
+		}
+		try {
+			this._parsedHref = new Url();
+			this._parsedHref.parse(this.href);
+		} catch (e) {
+			this._parsedHref = new Url();
 		}
 		return this._parsedHref;
 	}
-
+	
 	/**
 	 * @param {Server} server
 	 * @returns {function}
