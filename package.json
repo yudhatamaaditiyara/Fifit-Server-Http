@@ -8,7 +8,8 @@
 		"url": "git+https://github.com/yudhatamaaditiyara/Fifit-Server-Http.git"
 	},
 	"dependencies": {
-		"fifit-url": "0.0.9"
+		"fifit-url": "0.0.9",
+		"ganiyem-error": "1.4.3"
 	},
 	"devDependencies": {
 		"coveralls": "3.0.7",
