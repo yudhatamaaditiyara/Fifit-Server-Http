@@ -1,13 +1,13 @@
 {
-  "name": "fifit-server-http",
-  "description": "The Fifit Server Http",
-  "license": "Apache-2.0",
-  "version": "0.0.2",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/yudhatamaaditiyara/Fifit-Server-Http.git"
-  },
-  "dependencies": {
-    "fifit-url": "0.0.7"
-  }
+	"name": "fifit-server-http",
+	"description": "The Fifit Server Http",
+	"license": "Apache-2.0",
+	"version": "0.0.2",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/yudhatamaaditiyara/Fifit-Server-Http.git"
+	},
+	"dependencies": {
+		"fifit-url": "0.0.7"
+	}
 }
