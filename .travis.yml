@@ -6,6 +6,6 @@ cache:
   directories:
     - "node_modules"
 script:
-  - "sudo $(which npm) test"
+  - sudo env "PATH=$PATH" npm test
 after_success:
   - npm run coveralls
