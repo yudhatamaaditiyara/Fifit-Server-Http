@@ -40,5 +40,3 @@ module.exports.createServerIpv6Host = () => new Server(config.serverIpv6Host);
 module.exports.createServerIpv6HostDefaultPort = () => new Server(config.serverIpv6HostDefaultPort);
 module.exports.createSecureServer = () => new SecureServer(config.secureServer);
 module.exports.createSecureServerDefaultPort = () => new SecureServer(config.secureServerDefaultPort);
-module.exports.createSecureServerIpv6Host = () => new SecureServer(config.secureServerIpv6Host);
-module.exports.createSecureServerIpv6HostDefaultPort = () => new SecureServer(config.secureServerIpv6HostDefaultPort);

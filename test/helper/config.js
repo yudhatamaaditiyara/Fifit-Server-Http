@@ -52,21 +52,5 @@ module.exports = {
 			key: fs.readFileSync(__dirname + '/cert/key.pem'),
 			cert: fs.readFileSync(__dirname + '/cert/cert.pem')
 		}
-	},
-	secureServerIpv6Host:{
-		host: 'localhost',
-		port: 9000,
-		options: {
-			key: fs.readFileSync(__dirname + '/cert/key.pem'),
-			cert: fs.readFileSync(__dirname + '/cert/cert.pem')
-		}
-	},
-	secureServerIpv6HostDefaultPort:{
-		host: 'localhost',
-		port: 443,
-		options: {
-			key: fs.readFileSync(__dirname + '/cert/key.pem'),
-			cert: fs.readFileSync(__dirname + '/cert/cert.pem')
-		}
 	}
 };
