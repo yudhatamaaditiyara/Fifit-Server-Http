@@ -49,7 +49,7 @@ describe('Response#status', () => {
 
 	/**
 	 */
-	it('must be ignore value when headerSent === "true"', (done) => {
+	it('must be ignore value when headerSent === true', (done) => {
 		let server = helper.createServer();
 		server.listen((request, response) => {
 			response.status = 200;
