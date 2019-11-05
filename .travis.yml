@@ -1,3 +1,4 @@
+sudo: required
 language: node_js
 node_js:
   - "12.0"
@@ -6,6 +7,6 @@ cache:
   directories:
     - "node_modules"
 script:
-  - sudo $(which npm) run test
+  - npm run test
 after_success:
-  - sudo $(which npm) run coveralls
+  - npm run coveralls
