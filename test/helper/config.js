@@ -30,11 +30,11 @@ module.exports = {
 		port: 80
 	},
 	serverIpv6Host:{
-		host: '::1',
+		host: '0:0:0:0:0:ffff:7f00:1',
 		port: 9000
 	},
 	serverIpv6HostDefaultPort:{
-		host: '::1',
+		host: '0:0:0:0:0:ffff:7f00:1',
 		port: 80,
 	},
 	secureServer:{
