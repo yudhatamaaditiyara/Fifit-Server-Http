@@ -18,34 +18,24 @@ const http = require('http');
 const config = require('../../helper/config');
 const helper = require('../../helper/helper');
 
-/**
- */
 describe('Server', () => {
-	/**
-	 */
-	it('must be Server#options.host === config.server.host', async() => {
-		let server = helper.createServer();
-		assert.strictEqual(server.options.host, config.server.host);
-	});
+  it('must be Server#options.host === config.server.host', () => {
+    let server = helper.createServer();
+    assert.strictEqual(server.options.host, config.server.host);
+  });
 
-	/**
-	 */
-	it('must be Server#options.port === config.server.port', async() => {
-		let server = helper.createServer();
-		assert.strictEqual(server.options.port, config.server.port);
-	});
+  it('must be Server#options.port === config.server.port', () => {
+    let server = helper.createServer();
+    assert.strictEqual(server.options.port, config.server.port);
+  });
 
-	/**
-	 */
-	it('must be Server#resource instanceof http.Server', async() => {
-		let server = helper.createServer();
-		assert.ok(server.resource instanceof http.Server);
-	});
+  it('must be Server#resource instanceof http.Server', () => {
+    let server = helper.createServer();
+    assert.ok(server.resource instanceof http.Server);
+  });
 
-	/**
-	 */
-	it('must be Server#isStarted === false', async() => {
-		let server = helper.createServer();
-		assert.ok(server.isStarted === false);
-	});
+  it('must be Server#isStarted === false', () => {
+    let server = helper.createServer();
+    assert.ok(server.isStarted === false);
+  });
 });

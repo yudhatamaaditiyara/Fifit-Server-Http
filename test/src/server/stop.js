@@ -17,30 +17,24 @@ const assert = require('assert');
 const {RuntimeError} = require('ganiyem-error');
 const helper = require('../../helper/helper');
 
-/**
- */
 describe('Server#stop()', () => {
-	/**
-	 */
-	it('must be Server#isStarted === false', async() => {
-		let server = helper.createServer();
-		await server.start();
-		assert.ok(server.isStarted === true);
-		await server.stop();
-		assert.ok(server.isStarted === false);
-	});
+  it('must be Server#isStarted === false', async() => {
+    let server = helper.createServer();
+    await server.start();
+    assert.ok(server.isStarted === true);
+    await server.stop();
+    assert.ok(server.isStarted === false);
+  });
 
-	/**
-	 */
-	it('must be reject(RuntimeError) when server is already stoped', async() => {
-		let server = helper.createServer();
-		await server.start();
-		await server.stop();
-		try {
-			await server.stop();
-			assert.ok(false);
-		} catch (e) {
-			assert.ok(e instanceof RuntimeError);
-		}
-	});
+  it('must be reject(RuntimeError) when server is already stoped', async() => {
+    let server = helper.createServer();
+    await server.start();
+    await server.stop();
+    try {
+      await server.stop();
+      assert.ok(false);
+    } catch (e) {
+      assert.ok(e instanceof RuntimeError);
+    }
+  });
 });

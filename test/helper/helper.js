@@ -22,21 +22,34 @@ const {Server} = require('../../');
 /**
  */
 class SecureServer extends Server{
-	_createServerOptions(){
-		return Object.assign({}, this.options.options, super._createServerOptions());
-	}
-	_createServerResource(){
-		return https.createServer(this._createServerOptions());
-	}
+  _createServerOptions(){
+    return Object.assign({}, this.options.options, super._createServerOptions());
+  }
+  _createServerResource(){
+    return https.createServer(this._createServerOptions());
+  }
 }
 
 /**
  * @+
  */
-module.exports = {};
-module.exports.createServer = () => new Server(config.server);
-module.exports.createServerDefaultPort = () => new Server(config.serverDefaultPort);
-module.exports.createServerIpv6Host = () => new Server(config.serverIpv6Host);
-module.exports.createServerIpv6HostDefaultPort = () => new Server(config.serverIpv6HostDefaultPort);
-module.exports.createSecureServer = () => new SecureServer(config.secureServer);
-module.exports.createSecureServerDefaultPort = () => new SecureServer(config.secureServerDefaultPort);
+module.exports = {
+  createServer(){
+    return new Server(config.server)
+  },
+  createServerDefaultPort(){
+    return new Server(config.serverDefaultPort)
+  },
+  createServerIpv6Host(){
+    return new Server(config.serverIpv6Host)
+  },
+  createServerIpv6HostDefaultPort(){
+    return new Server(config.serverIpv6HostDefaultPort)
+  },
+  createSecureServer(){
+    return new SecureServer(config.secureServer)
+  },
+  createSecureServerDefaultPort(){
+    return new SecureServer(config.secureServerDefaultPort)
+  }
+};

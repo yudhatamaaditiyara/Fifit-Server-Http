@@ -19,24 +19,16 @@ const Request = require('../../lib/request');
 const Response = require('../../lib/response');
 const http = require('../../');
 
-/**
- */
 describe('index', () => {
-	/**
-	 */
-	it('must be exports http.Server', async() => {
-		assert.ok(http.Server === Server);
-	});
+  it('must be exported http.Server', () => {
+    assert.ok(http.Server === Server);
+  });
 
-	/**
-	 */
-	it('must be exports http.Request', async() => {
-		assert.ok(http.Request === Request);
-	});
-	
-	/**
-	 */
-	it('must be exports http.Response', async() => {
-		assert.ok(http.Response === Response);
-	});
+  it('must be exported http.Request', () => {
+    assert.ok(http.Request === Request);
+  });
+
+  it('must be exported http.Response', () => {
+    assert.ok(http.Response === Response);
+  });
 });

@@ -21,36 +21,36 @@ const fs = require('fs');
  * @+
  */
 module.exports = {
-	server:{
-		host: 'localhost',
-		port: 9000
-	},
-	serverDefaultPort:{
-		host: '127.0.0.1',
-		port: 80
-	},
-	serverIpv6Host:{
-		host: '0:0:0:0:0:ffff:7f00:1',
-		port: 9000
-	},
-	serverIpv6HostDefaultPort:{
-		host: '0:0:0:0:0:ffff:7f00:1',
-		port: 80,
-	},
-	secureServer:{
-		host: 'localhost',
-		port: 9000,
-		options: {
-			key: fs.readFileSync(__dirname + '/cert/key.pem'),
-			cert: fs.readFileSync(__dirname + '/cert/cert.pem')
-		}
-	},
-	secureServerDefaultPort:{
-		host: 'localhost',
-		port: 443,
-		options: {
-			key: fs.readFileSync(__dirname + '/cert/key.pem'),
-			cert: fs.readFileSync(__dirname + '/cert/cert.pem')
-		}
-	}
+  server:{
+    host: 'localhost',
+    port: 9000
+  },
+  serverDefaultPort:{
+    host: '127.0.0.1',
+    port: 80
+  },
+  serverIpv6Host:{
+    host: '0:0:0:0:0:ffff:7f00:1',
+    port: 9000
+  },
+  serverIpv6HostDefaultPort:{
+    host: '0:0:0:0:0:ffff:7f00:1',
+    port: 80,
+  },
+  secureServer:{
+    host: 'localhost',
+    port: 9000,
+    options: {
+      key: fs.readFileSync(__dirname + '/cert/key.pem'),
+      cert: fs.readFileSync(__dirname + '/cert/cert.pem')
+    }
+  },
+  secureServerDefaultPort:{
+    host: 'localhost',
+    port: 443,
+    options: {
+      key: fs.readFileSync(__dirname + '/cert/key.pem'),
+      cert: fs.readFileSync(__dirname + '/cert/cert.pem')
+    }
+  }
 };
