@@ -15,7 +15,7 @@
  */
 const assert = require('assert');
 const {RuntimeError} = require('ganiyem-error');
-const helper = require('../../helper/helper');
+const helper = require('../../helper');
 
 describe('Server#start()', () => {
   it('must be Server#isStarted === true', async() => {

@@ -15,7 +15,7 @@
  */
 const assert = require('assert');
 const http = require('http');
-const helper = require('../../helper/helper');
+const helper = require('../../helper');
 
 describe('Request#isAbsoluteUrl', () => {
   it('must be "true" request url', (done) => {

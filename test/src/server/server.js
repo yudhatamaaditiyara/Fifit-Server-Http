@@ -15,8 +15,8 @@
  */
 const assert = require('assert');
 const http = require('http');
+const helper = require('../../helper');
 const config = require('../../helper/config');
-const helper = require('../../helper/helper');
 
 describe('Server', () => {
   it('must be Server#options.host === config.server.host', () => {

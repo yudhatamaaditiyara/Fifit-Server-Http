@@ -16,7 +16,7 @@
 const assert = require('assert');
 const http = require('http');
 const https = require('https');
-const helper = require('../../helper/helper');
+const helper = require('../../helper');
 
 describe('Request#isSecure', () => {
   it('must be createServer() -> isSecure === false', (done) => {

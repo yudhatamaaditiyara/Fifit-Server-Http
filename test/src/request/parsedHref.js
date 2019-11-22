@@ -18,7 +18,7 @@ const http = require('http');
 const url = require('url');
 const Url = require('fifit-url');
 const {Request} = require('../../../');
-const helper = require('../../helper/helper');
+const helper = require('../../helper');
 
 describe('Request#parsedHref', () => {
   it('must be instanceof fifit.Url', () => {

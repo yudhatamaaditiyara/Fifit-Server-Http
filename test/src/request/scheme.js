@@ -17,7 +17,7 @@ const assert = require('assert');
 const http = require('http');
 const https = require('https');
 const {Request} = require('../../../');
-const helper = require('../../helper/helper');
+const helper = require('../../helper');
 
 describe('Request#scheme', () => {
   it('must be used protected field', () => {

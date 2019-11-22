@@ -16,7 +16,7 @@
 const assert = require('assert');
 const http = require('http');
 const {Request} = require('../../../');
-const helper = require('../../helper/helper');
+const helper = require('../../helper');
 
 describe('Request#query', () => {
   it('must be typeof string', () => {

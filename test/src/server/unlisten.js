@@ -16,7 +16,7 @@
 const assert = require('assert');
 const {RuntimeError} = require('ganiyem-error');
 const {Server} = require('../../../');
-const helper = require('../../helper/helper');
+const helper = require('../../helper');
 
 describe('Server#unlisten()', () => {
   it('must be return Server', async() => {

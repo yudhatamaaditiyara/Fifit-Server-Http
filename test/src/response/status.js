@@ -15,7 +15,7 @@
  */
 const assert = require('assert');
 const http = require('http');
-const helper = require('../../helper/helper');
+const helper = require('../../helper');
 
 describe('Response#status', () => {
   it('must be valid value', (done) => {

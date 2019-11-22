@@ -17,7 +17,7 @@ const assert = require('assert');
 const http = require('http');
 const url = require('url');
 const {Request} = require('../../../');
-const helper = require('../../helper/helper');
+const helper = require('../../helper');
 
 describe('Request#searchParams', () => {
   it('must be instanceof url.URLSearchParams', () => {
