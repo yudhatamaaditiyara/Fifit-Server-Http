@@ -8,13 +8,13 @@
     "url": "git+https://github.com/yudhatamaaditiyara/Fifit-Server-Http.git"
   },
   "dependencies": {
-    "fifit-url": "0.0.10",
-    "ganiyem-error": "1.5.1"
+    "fifit-url": "^0.0.10",
+    "ganiyem-error": "^1.5.1"
   },
   "devDependencies": {
-    "coveralls": "3.0.7",
-    "mocha": "6.2.2",
-    "nyc": "14.1.1"
+    "coveralls": "^3.0.7",
+    "mocha": "^6.2.2",
+    "nyc": "^14.1.1"
   },
   "engines": {
     "node": ">= 12.0.0"
