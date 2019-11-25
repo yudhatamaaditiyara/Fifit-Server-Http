@@ -38,4 +38,97 @@ describe('Server', () => {
     let server = helper.createServer();
     assert.ok(server.isStarted === false);
   });
+
+  it('must be work createServer()', (done) => {
+    let server = helper.createServer();
+    server.listen((request, response) => {
+      response.end(request.href);
+    });
+    server.start().then(() => {
+      helper.createHttpRequest({
+        host: server.options.host,
+        port: server.options.port
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'http://' + server.options.host + ':' + server.options.port + '/');
+        server.stop().then(done);
+      });
+    });
+  });
+
+  it('must be work createServerDefaultPort()', (done) => {
+    let server = helper.createServerDefaultPort();
+    server.listen((request, response) => {
+      response.end(request.href);
+    });
+    server.start().then(() => {
+      helper.createHttpRequest({
+        host: server.options.host
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'http://' + server.options.host + '/');
+        server.stop().then(done);
+      });
+    });
+  });
+
+  it('must be work createServerIpv6Host()', (done) => {
+    let server = helper.createServerIpv6Host();
+    server.listen((request, response) => {
+      response.end(request.href);
+    });
+    server.start().then(() => {
+      helper.createHttpRequest({
+        host: server.options.host,
+        port: server.options.port
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'http://[' + server.options.host + ']:' + server.options.port + '/');
+        server.stop().then(done);
+      });
+    });
+  });
+
+  it('must be work createServerIpv6HostDefaultPort()', (done) => {
+    let server = helper.createServerIpv6HostDefaultPort();
+    server.listen((request, response) => {
+      response.end(request.href);
+    });
+    server.start().then(() => {
+      helper.createHttpRequest({
+        host: server.options.host
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'http://[' + server.options.host + ']/');
+        server.stop().then(done);
+      });
+    });
+  });
+
+  it('must be work createSecureServer()', (done) => {
+    let server = helper.createSecureServer();
+    server.listen((request, response) => {
+      response.end(request.href);
+    });
+    server.start().then(() => {
+      helper.createHttpSecureRequest({
+        host: server.options.host,
+        port: server.options.port
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'https://' + server.options.host + ':' + server.options.port + '/');
+        server.stop().then(done);
+      });
+    });
+  });
+
+  it('must be work createSecureServerDefaultPort()', (done) => {
+    let server = helper.createSecureServerDefaultPort();
+    server.listen((request, response) => {
+      response.end(request.href);
+    });
+    server.start().then(() => {
+      helper.createHttpSecureRequest({
+        host: server.options.host
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'https://' + server.options.host + '/');
+        server.stop().then(done);
+      });
+    });
+  });
 });
