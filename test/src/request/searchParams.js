@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 const assert = require('assert');
-const http = require('http');
 const url = require('url');
 const {Request} = require('../../../');
 const helper = require('../../helper');
 
 describe('Request#searchParams', () => {
   it('must be instanceof url.URLSearchParams', () => {
-    let request = new Request();
+    let request = Object.create(Request.prototype);
     request.url = 'http://hostname/path?query=value';
     assert.ok(request.searchParams instanceof url.URLSearchParams);
   });
 
-  it('must be instanceof url.URLSearchParams when fail to parse url', () => {
-    let request = new Request();
+  it('must be url.URLSearchParams when fail to parse url', () => {
+    let request = Object.create(Request.prototype);
     request.url = null;
     assert.ok(request.searchParams instanceof url.URLSearchParams);
   });
@@ -38,20 +37,12 @@ describe('Request#searchParams', () => {
       response.end(request.searchParams.toString());
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpRequest({
         host: server.options.host,
-        port: server.options.port,
-        path: '/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, '');
-          await server.stop();
-          done();
-        });
+        port: server.options.port
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, '');
+        server.stop().then(done);
       });
     });
   });
@@ -62,20 +53,13 @@ describe('Request#searchParams', () => {
       response.end(request.searchParams.toString());
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpRequest({
         host: server.options.host,
         port: server.options.port,
         path: '/path?query=value'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, 'query=value');
-          await server.stop();
-          done();
-        });
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'query=value');
+        server.stop().then(done);
       });
     });
   });
@@ -86,20 +70,13 @@ describe('Request#searchParams', () => {
       response.end(request.searchParams.toString());
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpRequest({
         host: server.options.host,
         port: server.options.port,
         path: 'http://hostname/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, '');
-          await server.stop();
-          done();
-        });
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, '');
+        server.stop().then(done);
       });
     });
   });
@@ -110,20 +87,13 @@ describe('Request#searchParams', () => {
       response.end(request.searchParams.toString());
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpRequest({
         host: server.options.host,
         port: server.options.port,
         path: 'http://hostname/path?query=value'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, 'query=value');
-          await server.stop();
-          done();
-        });
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'query=value');
+        server.stop().then(done);
       });
     });
   });

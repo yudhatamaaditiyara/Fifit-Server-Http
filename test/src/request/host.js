@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 const assert = require('assert');
-const http = require('http');
 const {Request} = require('../../../');
 const helper = require('../../helper');
 
@@ -22,7 +21,7 @@ describe('Request#host', () => {
   it('must be used protected field', () => {
     let request = Object.create(Request.prototype);
     request._host = 'hostname:9000';
-    assert.ok(request.host === request._host);
+    assert.strictEqual(request.host, request._host);
   });
 
   it('must be "" when request host is empty', () => {
@@ -31,97 +30,95 @@ describe('Request#host', () => {
     assert.strictEqual(request.host, '');
   });
 
-  it('must be work createServer() -> host', (done) => {
+  it('must be work with createServer()', (done) => {
     let server = helper.createServer();
     server.listen((request, response) => {
       response.end(request.host);
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpRequest({
         host: server.options.host,
-        port: server.options.port,
-        path: '/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, options.host + ':' + options.port);
-          await server.stop();
-          done();
-        });
+        port: server.options.port
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, server.options.host + ':' + server.options.port);
+        server.stop().then(done);
       });
     });
   });
 
-  it('must be work createServerDefaultPort() -> host', (done) => {
+  it('must be work with createServerDefaultPort()', (done) => {
     let server = helper.createServerDefaultPort();
     server.listen((request, response) => {
       response.end(request.host);
     });
     server.start().then(() => {
-      let options = {
-        host: server.options.host,
-        path: '/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, options.host);
-          await server.stop();
-          done();
-        });
+      helper.createHttpRequest({
+        host: server.options.host
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, server.options.host);
+        server.stop().then(done);
       });
     });
   });
 
-  it('must be work createServerIpv6Host() -> host', (done) => {
+  it('must be work with createServerIpv6Host()', (done) => {
     let server = helper.createServerIpv6Host();
     server.listen((request, response) => {
       response.end(request.host);
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpRequest({
         host: server.options.host,
-        port: server.options.port,
-        path: '/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, '[' + options.host + ']:' + options.port);
-          await server.stop();
-          done();
-        });
+        port: server.options.port
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, '[' + server.options.host + ']:' + server.options.port);
+        server.stop().then(done);
       });
     });
   });
 
-  it('must be work createServerIpv6HostDefaultPort() -> host', (done) => {
+  it('must be work with createServerIpv6HostDefaultPort()', (done) => {
     let server = helper.createServerIpv6HostDefaultPort();
     server.listen((request, response) => {
       response.end(request.host);
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpRequest({
+        host: server.options.host
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, '[' + server.options.host + ']');
+        server.stop().then(done);
+      });
+    });
+  });
+
+  it('must be work with createSecureServer()', (done) => {
+    let server = helper.createSecureServer();
+    server.listen((request, response) => {
+      response.end(request.host);
+    });
+    server.start().then(() => {
+      helper.createHttpSecureRequest({
         host: server.options.host,
-        port: server.options.port,
-        path: '/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, '[' + options.host + ']');
-          await server.stop();
-          done();
-        });
+        port: server.options.port
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, server.options.host + ':' + server.options.port);
+        server.stop().then(done);
+      });
+    });
+  });
+
+  it('must be work with createSecureServerDefaultPort()', (done) => {
+    let server = helper.createSecureServerDefaultPort();
+    server.listen((request, response) => {
+      response.end(request.host);
+    });
+    server.start().then(() => {
+      helper.createHttpSecureRequest({
+        host: server.options.host
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, server.options.host);
+        server.stop().then(done);
       });
     });
   });

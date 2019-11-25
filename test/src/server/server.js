@@ -39,7 +39,7 @@ describe('Server', () => {
     assert.ok(server.isStarted === false);
   });
 
-  it('must be work createServer()', (done) => {
+  it('must be work with createServer()', (done) => {
     let server = helper.createServer();
     server.listen((request, response) => {
       response.end(request.href);
@@ -55,7 +55,7 @@ describe('Server', () => {
     });
   });
 
-  it('must be work createServerDefaultPort()', (done) => {
+  it('must be work with createServerDefaultPort()', (done) => {
     let server = helper.createServerDefaultPort();
     server.listen((request, response) => {
       response.end(request.href);
@@ -70,7 +70,7 @@ describe('Server', () => {
     });
   });
 
-  it('must be work createServerIpv6Host()', (done) => {
+  it('must be work with createServerIpv6Host()', (done) => {
     let server = helper.createServerIpv6Host();
     server.listen((request, response) => {
       response.end(request.href);
@@ -86,7 +86,7 @@ describe('Server', () => {
     });
   });
 
-  it('must be work createServerIpv6HostDefaultPort()', (done) => {
+  it('must be work with createServerIpv6HostDefaultPort()', (done) => {
     let server = helper.createServerIpv6HostDefaultPort();
     server.listen((request, response) => {
       response.end(request.href);
@@ -101,7 +101,7 @@ describe('Server', () => {
     });
   });
 
-  it('must be work createSecureServer()', (done) => {
+  it('must be work with createSecureServer()', (done) => {
     let server = helper.createSecureServer();
     server.listen((request, response) => {
       response.end(request.href);
@@ -117,7 +117,7 @@ describe('Server', () => {
     });
   });
 
-  it('must be work createSecureServerDefaultPort()', (done) => {
+  it('must be work with createSecureServerDefaultPort()', (done) => {
     let server = helper.createSecureServerDefaultPort();
     server.listen((request, response) => {
       response.end(request.href);

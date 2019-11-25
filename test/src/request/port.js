@@ -14,108 +14,74 @@
  * limitations under the License.
  */
 const assert = require('assert');
-const http = require('http');
 const {Request} = require('../../../');
 const helper = require('../../helper');
 
 describe('Request#port', () => {
   it('must be used protected field', () => {
-    let request = new Request();
+    let request = Object.create(Request.prototype);
     request._port = '9000';
     assert.strictEqual(request.port, request._port);
   });
 
-  it('must be work createServer() -> port', (done) => {
+  it('must be work with createServer()', (done) => {
     let server = helper.createServer();
     server.listen((request, response) => {
       response.end(request.port);
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpRequest({
         host: server.options.host,
-        port: server.options.port,
-        path: '/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, String(options.port));
-          await server.stop();
-          done();
-        });
+        port: server.options.port
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, String(server.options.port));
+        server.stop().then(done);
       });
     });
   });
 
-  it('must be work createServerDefaultPort() -> port', (done) => {
+  it('must be work with createServerDefaultPort()', (done) => {
     let server = helper.createServerDefaultPort();
     server.listen((request, response) => {
       response.end(request.port);
     });
     server.start().then(() => {
-      let options = {
-        host: server.options.host,
-        path: '/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, '');
-          await server.stop();
-          done();
-        });
+      helper.createHttpRequest({
+        host: server.options.host
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, '');
+        server.stop().then(done);
       });
     });
   });
 
-  it('must be work createServerIpv6Host() -> port', (done) => {
-    let server = helper.createServerIpv6Host();
+  it('must be work with createSecureServer()', (done) => {
+    let server = helper.createSecureServer();
     server.listen((request, response) => {
       response.end(request.port);
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpSecureRequest({
         host: server.options.host,
-        port: server.options.port,
-        path: '/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, String(options.port));
-          await server.stop();
-          done();
-        });
+        port: server.options.port
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, String(server.options.port));
+        server.stop().then(done);
       });
     });
   });
 
-  it('must be work createServerIpv6HostDefaultPort() -> port', (done) => {
-    let server = helper.createServerIpv6HostDefaultPort();
+  it('must be work with createSecureServerDefaultPort()', (done) => {
+    let server = helper.createSecureServerDefaultPort();
     server.listen((request, response) => {
       response.end(request.port);
     });
     server.start().then(() => {
-      let options = {
-        host: server.options.host,
-        port: server.options.port,
-        path: '/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, '');
-          await server.stop();
-          done();
-        });
+      helper.createHttpSecureRequest({
+        host: server.options.host
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, '');
+        server.stop().then(done);
       });
     });
   });

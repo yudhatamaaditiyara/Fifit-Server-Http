@@ -14,63 +14,44 @@
  * limitations under the License.
  */
 const assert = require('assert');
-const http = require('http');
-const https = require('https');
 const {Request} = require('../../../');
 const helper = require('../../helper');
 
 describe('Request#protocol', () => {
   it('must be used protected field', () => {
-    let request = new Request();
+    let request = Object.create(Request.prototype);
     request._protocol = 'http:';
     assert.strictEqual(request.protocol, request._protocol);
   });
 
-  it('must be createServer() -> protocol === "http:"', (done) => {
+  it('must be "http:" with createServer()', (done) => {
     let server = helper.createServer();
     server.listen((request, response) => {
       response.end(request.protocol);
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpRequest({
         host: server.options.host,
-        port: server.options.port,
-        path: '/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, 'http:');
-          await server.stop();
-          done();
-        });
+        port: server.options.port
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'http:');
+        server.stop().then(done);
       });
     });
   });
 
-  it('must be createSecureServer() -> protocol === "https:"', (done) => {
+  it('must be "https:" with createSecureServer()', (done) => {
     let server = helper.createSecureServer();
     server.listen((request, response) => {
       response.end(request.protocol);
     });
     server.start().then(() => {
-      let options = {
-        rejectUnauthorized: false,
+      helper.createHttpSecureRequest({
         host: server.options.host,
-        port: server.options.port,
-        path: '/'
-      };
-      https.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, 'https:');
-          await server.stop();
-          done();
-        });
+        port: server.options.port
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'https:');
+        server.stop().then(done);
       });
     });
   });

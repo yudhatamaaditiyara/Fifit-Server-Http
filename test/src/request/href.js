@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 const assert = require('assert');
-const http = require('http');
 const {Request} = require('../../../');
 const helper = require('../../helper');
 
 describe('Request#href', () => {
   it('must be used protected field', () => {
-    let request = new Request();
+    let request = Object.create(Request.prototype);
     request._href = '/';
-    assert.ok(request.href === request._href);
+    assert.strictEqual(request.href, request._href);
   });
 
   it('must be work with request url "/"', (done) => {
@@ -31,20 +30,12 @@ describe('Request#href', () => {
       response.end(request.href);
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpRequest({
         host: server.options.host,
-        port: server.options.port,
-        path: '/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, 'http://' + options.host + ':' + options.port + options.path);
-          await server.stop();
-          done();
-        });
+        port: server.options.port
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'http://' + server.options.host + ':' + server.options.port + '/');
+        server.stop().then(done);
       });
     });
   });
@@ -55,20 +46,13 @@ describe('Request#href', () => {
       response.end(request.href);
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpRequest({
         host: server.options.host,
         port: server.options.port,
         path: '/path?query=value'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, 'http://' + options.host + ':' + options.port + options.path);
-          await server.stop();
-          done();
-        });
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'http://' + server.options.host + ':' + server.options.port + '/path?query=value');
+        server.stop().then(done);
       });
     });
   });
@@ -79,20 +63,13 @@ describe('Request#href', () => {
       response.end(request.href);
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpRequest({
         host: server.options.host,
         port: server.options.port,
         path: 'http://hostname/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, options.path);
-          await server.stop();
-          done();
-        });
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'http://hostname/');
+        server.stop().then(done);
       });
     });
   });
@@ -103,20 +80,13 @@ describe('Request#href', () => {
       response.end(request.href);
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpRequest({
         host: server.options.host,
         port: server.options.port,
         path: 'http://hostname/path?query=value'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, options.path);
-          await server.stop();
-          done();
-        });
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'http://hostname/path?query=value');
+        server.stop().then(done);
       });
     });
   });

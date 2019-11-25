@@ -14,54 +14,39 @@
  * limitations under the License.
  */
 const assert = require('assert');
-const http = require('http');
 const helper = require('../../helper');
 
 describe('Request#isAbsoluteUrl', () => {
-  it('must be "true" request url', (done) => {
+  it('must be "true" with request url "http://hostname/"', (done) => {
     let server = helper.createServer();
     server.listen((request, response) => {
       response.end(request.isAbsoluteUrl ? 'true' : 'false');
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpRequest({
         host: server.options.host,
         port: server.options.port,
-        path: 'http://hostname/path?query=value'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, 'true');
-          await server.stop();
-          done();
-        });
+        path: 'http://hostname/'
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'true');
+        server.stop().then(done);
       });
     });
   });
 
-  it('must be "false" request url path', (done) => {
+  it('must be "false" with request url "/path?query=value"', (done) => {
     let server = helper.createServer();
     server.listen((request, response) => {
       response.end(request.isAbsoluteUrl ? 'true' : 'false');
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpRequest({
         host: server.options.host,
         port: server.options.port,
         path: '/path?query=value'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, 'false');
-          await server.stop();
-          done();
-        });
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'false');
+        server.stop().then(done);
       });
     });
   });

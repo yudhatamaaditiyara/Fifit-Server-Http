@@ -14,31 +14,22 @@
  * limitations under the License.
  */
 const assert = require('assert');
-const http = require('http');
 const helper = require('../../helper');
 
 describe('Response#status', () => {
-  it('must be valid value', (done) => {
+  it('must be valid status', (done) => {
     let server = helper.createServer();
     server.listen((request, response) => {
-      response.status = 200;
+      response.status = 404;
       response.end(String(response.status));
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpRequest({
         host: server.options.host,
-        port: server.options.port,
-        path: '/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, '200');
-          await server.stop();
-          done();
-        });
+        port: server.options.port
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, '404');
+        server.stop().then(done);
       });
     });
   });
@@ -52,20 +43,12 @@ describe('Response#status', () => {
       response.end(String(response.status));
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpRequest({
         host: server.options.host,
-        port: server.options.port,
-        path: '/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, '404');
-          await server.stop();
-          done();
-        });
+        port: server.options.port
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, '404');
+        server.stop().then(done);
       });
     });
   });

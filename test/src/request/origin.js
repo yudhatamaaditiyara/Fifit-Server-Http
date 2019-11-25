@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 const assert = require('assert');
-const http = require('http');
 const {Request} = require('../../../');
 const helper = require('../../helper');
 
 describe('Request#origin', () => {
   it('must be used protected field', () => {
-    let request = new Request();
+    let request = Object.create(Request.prototype);
     request._origin = 'http://hostname:9000';
-    assert.ok(request.origin === request._origin);
+    assert.strictEqual(request.origin, request._origin);
   });
 
   it('must be work with createServer()', (done) => {
@@ -31,20 +30,12 @@ describe('Request#origin', () => {
       response.end(request.origin);
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpRequest({
         host: server.options.host,
-        port: server.options.port,
-        path: '/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, 'http://' + options.host + ':' + options.port);
-          await server.stop();
-          done();
-        });
+        port: server.options.port
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'http://' + server.options.host + ':' + server.options.port);
+        server.stop().then(done);
       });
     });
   });
@@ -55,66 +46,42 @@ describe('Request#origin', () => {
       response.end(request.origin);
     });
     server.start().then(() => {
-      let options = {
-        host: server.options.host,
-        path: '/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, 'http://' + options.host);
-          await server.stop();
-          done();
-        });
+      helper.createHttpRequest({
+        host: server.options.host
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'http://' + server.options.host);
+        server.stop().then(done);
       });
     });
   });
 
-  it('must be work with createServerIpv6Host()', (done) => {
-    let server = helper.createServerIpv6Host();
+  it('must be work with createSecureServer()', (done) => {
+    let server = helper.createSecureServer();
     server.listen((request, response) => {
       response.end(request.origin);
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpSecureRequest({
         host: server.options.host,
-        port: server.options.port,
-        path: '/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, 'http://[' + options.host + ']:' + options.port);
-          await server.stop();
-          done();
-        });
+        port: server.options.port
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'https://' + server.options.host + ':' + server.options.port);
+        server.stop().then(done);
       });
     });
   });
 
-  it('must be work with createServerIpv6HostDefaultPort()', (done) => {
-    let server = helper.createServerIpv6HostDefaultPort();
+  it('must be work with createSecureServerDefaultPort()', (done) => {
+    let server = helper.createSecureServerDefaultPort();
     server.listen((request, response) => {
       response.end(request.origin);
     });
     server.start().then(() => {
-      let options = {
-        host: server.options.host,
-        path: '/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, 'http://[' + options.host + ']');
-          await server.stop();
-          done();
-        });
+      helper.createHttpSecureRequest({
+        host: server.options.host
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'https://' + server.options.host);
+        server.stop().then(done);
       });
     });
   });

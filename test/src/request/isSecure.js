@@ -14,150 +14,37 @@
  * limitations under the License.
  */
 const assert = require('assert');
-const http = require('http');
-const https = require('https');
 const helper = require('../../helper');
 
 describe('Request#isSecure', () => {
-  it('must be createServer() -> isSecure === false', (done) => {
-    let server = helper.createServer();
-    server.listen((request, response) => {
-      response.end(request.isSecure ? 'true' : 'false');
-    });
-    server.start().then(() => {
-      let options = {
-        host: server.options.host,
-        port: server.options.port,
-        path: '/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, 'false');
-          await server.stop();
-          done();
-        });
-      });
-    });
-  });
-
-  it('must be createServerDefaultPort() -> isSecure === false', (done) => {
-    let server = helper.createServerDefaultPort();
-    server.listen((request, response) => {
-      response.end(request.isSecure ? 'true' : 'false');
-    });
-    server.start().then(() => {
-      let options = {
-        host: server.options.host,
-        path: '/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, 'false');
-          await server.stop();
-          done();
-        });
-      });
-    });
-  });
-
-  it('must be createServerIpv6Host() -> isSecure === false', (done) => {
-    let server = helper.createServerIpv6Host();
-    server.listen((request, response) => {
-      response.end(request.isSecure ? 'true' : 'false');
-    });
-    server.start().then(() => {
-      let options = {
-        host: server.options.host,
-        port: server.options.port,
-        path: '/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, 'false');
-          await server.stop();
-          done();
-        });
-      });
-    });
-  });
-
-  it('must be createServerIpv6HostDefaultPort() -> isSecure === false', (done) => {
-    let server = helper.createServerIpv6HostDefaultPort();
-    server.listen((request, response) => {
-      response.end(request.isSecure ? 'true' : 'false');
-    });
-    server.start().then(() => {
-      let options = {
-        host: server.options.host,
-        path: '/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, 'false');
-          await server.stop();
-          done();
-        });
-      });
-    });
-  });
-
-  it('must be createSecureServer() -> isSecure === true', (done) => {
+  it('must be "true" with createSecureServer()', (done) => {
     let server = helper.createSecureServer();
     server.listen((request, response) => {
       response.end(request.isSecure ? 'true' : 'false');
     });
     server.start().then(() => {
-      let options = {
-        rejectUnauthorized: false,
+      helper.createHttpSecureRequest({
         host: server.options.host,
-        port: server.options.port,
-        path: '/'
-      };
-      https.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, 'true');
-          await server.stop();
-          done();
-        });
+        port: server.options.port
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'true');
+        server.stop().then(done);
       });
     });
   });
 
-  it('must be createSecureServerDefaultPort() -> isSecure === true', (done) => {
-    let server = helper.createSecureServerDefaultPort();
+  it('must be "false" with createServer()', (done) => {
+    let server = helper.createServer();
     server.listen((request, response) => {
       response.end(request.isSecure ? 'true' : 'false');
     });
     server.start().then(() => {
-      let options = {
-        rejectUnauthorized: false,
+      helper.createHttpRequest({
         host: server.options.host,
-        path: '/'
-      };
-      https.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, 'true');
-          await server.stop();
-          done();
-        });
+        port: server.options.port
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'false');
+        server.stop().then(done);
       });
     });
   });

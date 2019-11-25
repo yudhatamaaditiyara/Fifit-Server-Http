@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 const assert = require('assert');
-const http = require('http');
 const url = require('url');
 const Url = require('fifit-url');
 const {Request} = require('../../../');
@@ -22,7 +21,7 @@ const helper = require('../../helper');
 
 describe('Request#parsedUrl', () => {
   it('must be instanceof fifit.Url', () => {
-    let request = new Request();
+    let request = Object.create(Request.prototype);
     request.url = 'http://hostname/path?query=value';
     assert.strictEqual(request._parsedUrl, void 0);
     assert.ok(request.parsedUrl instanceof Url);
@@ -30,7 +29,7 @@ describe('Request#parsedUrl', () => {
   });
 
   it('must be instanceof fifit.Url when fail to parse url', () => {
-    let request = new Request();
+    let request = Object.create(Request.prototype);
     request.url = null;
     assert.strictEqual(request._parsedUrl, void 0);
     assert.ok(request.parsedUrl instanceof Url);
@@ -43,20 +42,12 @@ describe('Request#parsedUrl', () => {
       response.end(url.format(request.parsedUrl));
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpRequest({
         host: server.options.host,
-        port: server.options.port,
-        path: '/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, options.path);
-          await server.stop();
-          done();
-        });
+        port: server.options.port
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, '/');
+        server.stop().then(done);
       });
     });
   });
@@ -67,20 +58,13 @@ describe('Request#parsedUrl', () => {
       response.end(url.format(request.parsedUrl));
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpRequest({
         host: server.options.host,
         port: server.options.port,
         path: '/path?query=value'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, options.path);
-          await server.stop();
-          done();
-        });
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, '/path?query=value');
+        server.stop().then(done);
       });
     });
   });
@@ -91,20 +75,13 @@ describe('Request#parsedUrl', () => {
       response.end(url.format(request.parsedUrl));
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpRequest({
         host: server.options.host,
         port: server.options.port,
         path: 'http://hostname/'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, options.path);
-          await server.stop();
-          done();
-        });
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'http://hostname/');
+        server.stop().then(done);
       });
     });
   });
@@ -115,20 +92,13 @@ describe('Request#parsedUrl', () => {
       response.end(url.format(request.parsedUrl));
     });
     server.start().then(() => {
-      let options = {
+      helper.createHttpRequest({
         host: server.options.host,
         port: server.options.port,
         path: 'http://hostname/path?query=value'
-      };
-      http.get(options, (response) => {
-        let buffer = '';
-        response.setEncoding('utf-8');
-        response.on('data', string => buffer += string);
-        response.on('end', async() => {
-          assert.strictEqual(buffer, options.path);
-          await server.stop();
-          done();
-        });
+      }).then(({buffer}) => {
+        assert.strictEqual(buffer, 'http://hostname/path?query=value');
+        server.stop().then(done);
       });
     });
   });
