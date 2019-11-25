@@ -20,15 +20,15 @@ const helper = require('../../helper');
 
 describe('Request#host', () => {
   it('must be used protected field', () => {
-    let request = new Request();
+    let request = Object.create(Request.prototype);
     request._host = 'hostname:9000';
     assert.ok(request.host === request._host);
   });
 
-  it('must be typeof string when host is empty', () => {
-    let request = new Request();
+  it('must be "" when request host is empty', () => {
+    let request = Object.create(Request.prototype);
     request.headers = {host: ''};
-    assert.ok(typeof request.host === 'string');
+    assert.strictEqual(request.host, '');
   });
 
   it('must be work createServer() -> host', (done) => {
