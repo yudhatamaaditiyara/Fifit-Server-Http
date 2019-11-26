@@ -37,8 +37,8 @@ describe('Request#query', () => {
     });
     server.start().then(() => {
       helper.createHttpRequest({
-        host: server.options.host,
-        port: server.options.port
+        host: server.config.host,
+        port: server.config.port
       }).then(({buffer}) => {
         assert.strictEqual(buffer, '');
         server.stop().then(done);
@@ -53,8 +53,8 @@ describe('Request#query', () => {
     });
     server.start().then(() => {
       helper.createHttpRequest({
-        host: server.options.host,
-        port: server.options.port,
+        host: server.config.host,
+        port: server.config.port,
         path: '/path?query=value'
       }).then(({buffer}) => {
         assert.strictEqual(buffer, 'query=value');
@@ -70,8 +70,8 @@ describe('Request#query', () => {
     });
     server.start().then(() => {
       helper.createHttpRequest({
-        host: server.options.host,
-        port: server.options.port,
+        host: server.config.host,
+        port: server.config.port,
         path: 'http://hostname/'
       }).then(({buffer}) => {
         assert.strictEqual(buffer, '');
@@ -87,8 +87,8 @@ describe('Request#query', () => {
     });
     server.start().then(() => {
       helper.createHttpRequest({
-        host: server.options.host,
-        port: server.options.port,
+        host: server.config.host,
+        port: server.config.port,
         path: 'http://hostname/path?query=value'
       }).then(({buffer}) => {
         assert.strictEqual(buffer, 'query=value');

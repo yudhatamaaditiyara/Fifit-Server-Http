@@ -24,8 +24,8 @@ describe('Request#hasHeader', () => {
     });
     server.start().then(() => {
       helper.createHttpRequest({
-        host: server.options.host,
-        port: server.options.port,
+        host: server.config.host,
+        port: server.config.port,
         headers: {
           'X-Fifit': 'Fithrotun Nisa'
         }
@@ -43,8 +43,8 @@ describe('Request#hasHeader', () => {
     });
     server.start().then(() => {
       helper.createHttpSecureRequest({
-        host: server.options.host,
-        port: server.options.port,
+        host: server.config.host,
+        port: server.config.port,
         headers: {
           'X-Fifit': 'Fithrotun Nisa'
         }

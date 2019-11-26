@@ -37,10 +37,10 @@ describe('Request#host', () => {
     });
     server.start().then(() => {
       helper.createHttpRequest({
-        host: server.options.host,
-        port: server.options.port
+        host: server.config.host,
+        port: server.config.port
       }).then(({buffer}) => {
-        assert.strictEqual(buffer, server.options.host + ':' + server.options.port);
+        assert.strictEqual(buffer, server.config.host + ':' + server.config.port);
         server.stop().then(done);
       });
     });
@@ -53,9 +53,9 @@ describe('Request#host', () => {
     });
     server.start().then(() => {
       helper.createHttpRequest({
-        host: server.options.host
+        host: server.config.host
       }).then(({buffer}) => {
-        assert.strictEqual(buffer, server.options.host);
+        assert.strictEqual(buffer, server.config.host);
         server.stop().then(done);
       });
     });
@@ -68,10 +68,10 @@ describe('Request#host', () => {
     });
     server.start().then(() => {
       helper.createHttpRequest({
-        host: server.options.host,
-        port: server.options.port
+        host: server.config.host,
+        port: server.config.port
       }).then(({buffer}) => {
-        assert.strictEqual(buffer, '[' + server.options.host + ']:' + server.options.port);
+        assert.strictEqual(buffer, '[' + server.config.host + ']:' + server.config.port);
         server.stop().then(done);
       });
     });
@@ -84,9 +84,9 @@ describe('Request#host', () => {
     });
     server.start().then(() => {
       helper.createHttpRequest({
-        host: server.options.host
+        host: server.config.host
       }).then(({buffer}) => {
-        assert.strictEqual(buffer, '[' + server.options.host + ']');
+        assert.strictEqual(buffer, '[' + server.config.host + ']');
         server.stop().then(done);
       });
     });
@@ -99,10 +99,10 @@ describe('Request#host', () => {
     });
     server.start().then(() => {
       helper.createHttpSecureRequest({
-        host: server.options.host,
-        port: server.options.port
+        host: server.config.host,
+        port: server.config.port
       }).then(({buffer}) => {
-        assert.strictEqual(buffer, server.options.host + ':' + server.options.port);
+        assert.strictEqual(buffer, server.config.host + ':' + server.config.port);
         server.stop().then(done);
       });
     });
@@ -115,9 +115,9 @@ describe('Request#host', () => {
     });
     server.start().then(() => {
       helper.createHttpSecureRequest({
-        host: server.options.host
+        host: server.config.host
       }).then(({buffer}) => {
-        assert.strictEqual(buffer, server.options.host);
+        assert.strictEqual(buffer, server.config.host);
         server.stop().then(done);
       });
     });

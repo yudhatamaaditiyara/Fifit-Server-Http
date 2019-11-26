@@ -31,8 +31,8 @@ describe('Request#scheme', () => {
     });
     server.start().then(() => {
       helper.createHttpRequest({
-        host: server.options.host,
-        port: server.options.port
+        host: server.config.host,
+        port: server.config.port
       }).then(({buffer}) => {
         assert.strictEqual(buffer, 'http');
         server.stop().then(done);
@@ -47,8 +47,8 @@ describe('Request#scheme', () => {
     });
     server.start().then(() => {
       helper.createHttpSecureRequest({
-        host: server.options.host,
-        port: server.options.port
+        host: server.config.host,
+        port: server.config.port
       }).then(({buffer}) => {
         assert.strictEqual(buffer, 'https');
         server.stop().then(done);
